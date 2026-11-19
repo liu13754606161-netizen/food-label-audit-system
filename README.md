@@ -4,7 +4,7 @@
 
 ## 在线交互演示
 
-**[👉 打开交互演示（GitHub Pages，公共网络可直接访问）](https://liu13754606161-netizen.github.io/food-label-audit-system/)**
+**[👉 打开交互演示，在线体验](https://liu13754606161-netizen.github.io/food-label-audit-system/)**
 
 演示页面可像使用真实软件一样点选、上传、识别、核对、审核、导出。**纯前端演示，不调用任何付费 API、不需要任何密钥、不产生任何费用**——所有交互由浏览器本地逻辑与示例数据驱动，任何人打开即可体验。
 
