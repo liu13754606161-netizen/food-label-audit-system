@@ -1,0 +1,48 @@
+{
+  "id": "multi_food_info_extraction_from_ocr_1",
+  "pluginKey": "@official-plugins/ai-text-to-json",
+  "pluginVersion": "1.0.21",
+  "name": "多食品信息提取",
+  "description": "从食品标签OCR文本中识别是否存在多个食品信息，如果存在多个食品，分别提取每个食品的名称、配料、净含量等信息，所有食品共享同一个厂商信息（委托方、被委托方、原料供应商）。",
+  "icon": "",
+  "paramsSchema": {
+    "properties": {
+      "ocr_text": {
+        "type": "string",
+        "description": "食品标签OCR识别文本"
+      }
+    },
+    "required": [
+      "ocr_text"
+    ],
+    "type": "object"
+  },
+  "formValue": {
+    "prompt": "你是一位专业的食品标签信息提取专家。\n\n请从以下食品标签OCR文本中提取信息：\n{{input.ocr_text}}\n\n提取要求：\n1. 首先判断标签中是否包含多个食品信息，如果包含则isMultiFood字段设为true，否则设为false\n2. 如果存在多个食品，分别提取每个食品的名称、配料、净含量信息存入foodList数组\n3. 提取所有食品共享的厂商信息，包括委托方、被委托方、原料供应商，存入manufacturerInfo对象\n4. 未找到的字段填空字符串\n5. 严格按照指定的JSON结构返回",
+    "jsonStructure": [
+      {
+        "name": "isMultiFood",
+        "paramType": "Boolean",
+        "paramDescription": "是否存在多个食品信息，是则返回true，否则返回false"
+      },
+      {
+        "name": "foodList",
+        "paramType": "Array",
+        "paramDescription": "食品信息列表，items schema: {name: string(食品名称), ingredients: string(配料), netContent: string(净含量)}"
+      },
+      {
+        "paramType": "Object",
+        "paramDescription": "厂商信息，schema: {consignor: string(委托方), consignee: string(被委托方), rawMaterialSupplier: string(原料供应商)}",
+        "name": "manufacturerInfo"
+      }
+    ],
+    "modelID": "87",
+    "modelParams": {
+      "maxTokens": 8192,
+      "temperature": 0.5
+    }
+  },
+  "createdAt": 1777258218279,
+  "updatedAt": 1777258218279,
+  "createdBy": 7213261982903025665
+}

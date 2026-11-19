@@ -1,0 +1,128 @@
+{
+  "id": "food_label_ocr_text_info_extract_1",
+  "pluginKey": "@official-plugins/ai-text-to-json",
+  "pluginVersion": "1.0.18",
+  "name": "食品标签OCR文本信息提取",
+  "description": "从食品标签的OCR识别文本中提取结构化的产品信息，包括供应商、委托方、被委托方、产品基础信息等关键字段，严谨处理多许可证情况。",
+  "icon": "",
+  "paramsSchema": {
+    "required": [
+      "ocr_raw_text"
+    ],
+    "type": "object",
+    "properties": {
+      "ocr_raw_text": {
+        "type": "string",
+        "description": "OCR提取的食品标签原始文本字符串"
+      }
+    }
+  },
+  "formValue": {
+    "modelParams": {
+      "maxTokens": 8192,
+      "temperature": 0.5
+    },
+    "prompt": "你是一个专业的食品标签合规提取专家。请从文本中提取信息并严格输出以下 JSON 字段。\n\n{{input.ocr_raw_text}}\n\n关键提取规则：\n\n产品类型： 即使文本中没有\"产品类型\"四个字，也请根据常识推断，如\"硬质糖果\"、\"糕点\"、\"饮料\"等，并输出在 产品类型 字段。\n\n许可证分离原则： 文本中可能包含多个 SC 开头的 14 位许可证号。\n\n紧跟在被委托方/生产厂附近的 SC 号，提取为 被委托方许可证。\n\n紧跟在原料供应商附近的 SC 号，提取为 原料供应商许可证。\n\n绝对不要将它们混淆。如果找不到对应的，请返回空字符串 \"\"。不要给我加默认值，如果没有就为空。\n\n其他规则：\n1. 严格按照给定的JSON结构输出，不要添加额外字段\n2. 如果某字段在文本中未找到，对应值填空字符串\n3. 提取内容要完整准确，保持原始文本的信息\n4. 电话号码、许可证编号等特殊格式内容要完整提取",
+    "jsonStructure": [
+      {
+        "paramDescription": "提供食品原料的供应商全称",
+        "name": "原料供应商名称",
+        "paramType": "String"
+      },
+      {
+        "paramDescription": "原料供应商的生产许可证编号（SC开头14位）",
+        "name": "原料供应商许可证",
+        "paramType": "String"
+      },
+      {
+        "paramType": "String",
+        "paramDescription": "产品委托生产的企业全称",
+        "name": "委托方名称"
+      },
+      {
+        "paramDescription": "委托方的详细注册地址",
+        "name": "委托方地址",
+        "paramType": "String"
+      },
+      {
+        "paramDescription": "委托方的联系电话号码",
+        "name": "委托方电话",
+        "paramType": "String"
+      },
+      {
+        "paramType": "String",
+        "paramDescription": "实际生产产品的企业全称",
+        "name": "被委托方名称"
+      },
+      {
+        "name": "被委托方地址",
+        "paramType": "String",
+        "paramDescription": "被委托方的详细生产地址"
+      },
+      {
+        "paramDescription": "被委托方的生产许可证编号（SC开头14位）",
+        "name": "被委托方许可证",
+        "paramType": "String"
+      },
+      {
+        "name": "被委托方产地",
+        "paramType": "String",
+        "paramDescription": "产品实际生产的产地信息"
+      },
+      {
+        "paramDescription": "产品类型，如硬质糖果、糕点、饮料等，根据常识推断",
+        "name": "产品类型",
+        "paramType": "String"
+      },
+      {
+        "paramDescription": "产品的正式名称",
+        "name": "食品名称",
+        "paramType": "String"
+      },
+      {
+        "name": "配料表",
+        "paramType": "String",
+        "paramDescription": "产品的全部配料清单"
+      },
+      {
+        "name": "净含量",
+        "paramType": "String",
+        "paramDescription": "产品的净含量及单位"
+      },
+      {
+        "paramDescription": "产品的保质期限",
+        "name": "保质期",
+        "paramType": "String"
+      },
+      {
+        "name": "贮存条件",
+        "paramType": "String",
+        "paramDescription": "产品的储存要求和条件"
+      },
+      {
+        "paramType": "String",
+        "paramDescription": "产品的生产许可证编号",
+        "name": "生产许可证编号"
+      },
+      {
+        "name": "产品标准号",
+        "paramType": "String",
+        "paramDescription": "产品执行的标准编号"
+      },
+      {
+        "name": "过敏原",
+        "paramType": "String",
+        "paramDescription": "产品中含有的过敏原提示信息"
+      },
+      {
+        "paramDescription": "产品标签上的其他温馨提示内容",
+        "name": "温馨提示",
+        "paramType": "String"
+      }
+    ],
+    "modelID": "87"
+  },
+  "createdAt": 1776934947794,
+  "updatedAt": 1777002217764,
+  "createdBy": 7213261982903025665
+}

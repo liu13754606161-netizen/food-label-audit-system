@@ -1,0 +1,30 @@
+{
+  "id": "doc_text_extraction_parser_1",
+  "pluginKey": "@official-plugins/ai-doc-parser",
+  "pluginVersion": "1.0.11",
+  "name": "文档文本内容提取",
+  "description": "解析PDF/Word等格式文档，提取纯文本内容用于后续处理",
+  "icon": "",
+  "paramsSchema": {
+    "type": "object",
+    "properties": {
+      "doc_file": {
+        "format": "plugin-file-url",
+        "description": "待解析的文档文件（支持PDF/DOC/DOCX等格式）",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      }
+    },
+    "required": [
+      "doc_file"
+    ]
+  },
+  "formValue": {
+    "fileUrl": "{{input.doc_file}}"
+  },
+  "createdAt": 1776935284306,
+  "updatedAt": 1776935284306,
+  "createdBy": 7213261982903025665
+}

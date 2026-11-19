@@ -1,0 +1,128 @@
+{
+  "id": "food_label_image_info_extract_1",
+  "pluginKey": "@official-plugins/ai-image-to-json",
+  "pluginVersion": "1.0.11",
+  "name": "食品标签图片信息提取",
+  "description": "从食品标签图片中提取厂商信息和食品信息的结构化数据",
+  "icon": "",
+  "paramsSchema": {
+    "type": "object",
+    "properties": {
+      "food_label_image": {
+        "description": "待解析的食品标签图片",
+        "items": {
+          "type": "string"
+        },
+        "type": "array",
+        "format": "plugin-image-url"
+      }
+    },
+    "required": [
+      "food_label_image"
+    ]
+  },
+  "formValue": {
+    "prompt": "你是一位专业的食品包装标签识别员。请从提供的食品标签图片中逐字提取以下指定字段的信息，确保信息准确完整，如未找到对应字段请填空字符串。\n\n关键规则：\n1. 图片可能是食品信息截图、营养成分表截图，或同时包含二者；必须尽量保留原文，不要自行改写。\n2. 标签上出现的“生产商”“原料生产商”“制造商”“原产商”对应 raw_material_supplier_name，不要放到被委托方。\n3. 标签上出现的“被委托方”“受委托方”“分装厂”“代工厂”对应 consignee_name、consignee_address、consignee_license、consignee_origin。\n4. 标签上出现的“委托方”“经销商”“品牌商”对应 consignor_name、consignor_address、consignor_phone。\n5. 多个 SC 许可证时，紧邻被委托方/分装厂的填 consignee_license，紧邻生产商/原料生产商的填 production_license_number，不能混淆。\n6. 营养成分表请完整提取项目、每100克/每份含量、NRV%等内容，填入 nutrition_facts 字段；如果没有营养表则填空字符串。",
+    "jsonStructure": [
+      {
+        "name": "raw_material_supplier_name",
+        "paramDescription": "原料供应商名称",
+        "paramType": "String"
+      },
+      {
+        "paramDescription": "委托方名称",
+        "paramType": "String",
+        "name": "consignor_name"
+      },
+      {
+        "paramType": "String",
+        "name": "consignor_address",
+        "paramDescription": "委托方地址"
+      },
+      {
+        "name": "consignor_phone",
+        "paramDescription": "委托方电话",
+        "paramType": "String"
+      },
+      {
+        "name": "consignee_name",
+        "paramDescription": "被委托方名称",
+        "paramType": "String"
+      },
+      {
+        "name": "consignee_address",
+        "paramDescription": "被委托方地址",
+        "paramType": "String"
+      },
+      {
+        "name": "consignee_license",
+        "paramDescription": "被委托方许可证",
+        "paramType": "String"
+      },
+      {
+        "paramType": "String",
+        "name": "consignee_origin",
+        "paramDescription": "被委托方产地"
+      },
+      {
+        "name": "food_name",
+        "paramDescription": "食品名称",
+        "paramType": "String"
+      },
+      {
+        "name": "ingredients_list",
+        "paramDescription": "配料表",
+        "paramType": "String"
+      },
+      {
+        "name": "nutrition_facts",
+        "paramDescription": "营养成分表，保留项目、含量和NRV%",
+        "paramType": "String"
+      },
+      {
+        "paramDescription": "净含量",
+        "paramType": "String",
+        "name": "net_content"
+      },
+      {
+        "name": "shelf_life",
+        "paramDescription": "保质期",
+        "paramType": "String"
+      },
+      {
+        "name": "storage_conditions",
+        "paramDescription": "贮存条件",
+        "paramType": "String"
+      },
+      {
+        "paramDescription": "生产许可证编号",
+        "paramType": "String",
+        "name": "production_license_number"
+      },
+      {
+        "name": "product_standard_number",
+        "paramDescription": "产品标准号",
+        "paramType": "String"
+      },
+      {
+        "paramType": "String",
+        "name": "allergen",
+        "paramDescription": "过敏源"
+      },
+      {
+        "name": "warm_prompt",
+        "paramDescription": "温馨提示",
+        "paramType": "String"
+      }
+    ],
+    "images": "{{input.food_label_image}}",
+    "modelID": "88",
+    "modelParams": {
+      "maxTokens": 8192,
+      "temperature": 0.5
+    }
+  },
+  "createdAt": 1776926170440,
+  "updatedAt": 1776926170440,
+  "createdBy": 7213261982903025665
+}

@@ -1,0 +1,43 @@
+{
+  "id": "food_label_multi_extract_1",
+  "pluginKey": "@official-plugins/ai-text-to-json",
+  "pluginVersion": "1.0.21",
+  "name": "多食品标签信息结构化提取",
+  "description": "从OCR识别的食品标签文本中提取结构化信息，支持识别多种分隔符格式，自动识别多个食品并分别提取完整信息，输出厂商信息和食品列表",
+  "icon": "",
+  "paramsSchema": {
+    "properties": {
+      "ocr_text": {
+        "type": "string",
+        "description": "OCR识别的食品标签文本内容"
+      }
+    },
+    "required": [
+      "ocr_text"
+    ],
+    "type": "object"
+  },
+  "formValue": {
+    "modelID": "87",
+    "modelParams": {
+      "temperature": 0.5,
+      "maxTokens": 8192
+    },
+    "prompt": "你是一位专业的食品标签信息提取专家，擅长从食品标签文本中准确提取结构化信息。\n\n请从以下OCR识别的食品标签文本中提取信息：\n{{input.ocr_text}}\n\n提取规则：\n1. 支持识别多种分隔符格式，包括但不限于\"========== 食品X ==========\"、\"--- 食品X ---\"、空白行分隔、表格分隔等，当检测到上述任意分隔符时，自动将内容划分为不同的食品条目\n2. 当文档中包含多个产品名称、多个配料表或多个净含量时，即使没有明确分隔符，也自动识别为多个独立食品，分别提取信息\n3. 标签上显示的\"生产商\"、\"原料生产商\"、\"制造商\"、\"原产商\"对应 rawMaterialSupplier（原料生产商）字段，禁止放到 entrustedParty\n4. 经销商/品牌商/委托方对应 delegator（委托方）字段\n5. 被委托方/受委托方/分装厂/代工厂对应 entrustedParty（被委托方）字段\n6. 多个SC许可证时，紧邻生产商/原料生产商的填 rawMaterialSupplier.license，紧邻被委托方/分装厂/代工厂的填 entrustedParty.license，不要混淆\n7. 多个原料生产商时以数组形式填入 rawMaterialSupplier；多个委托方或被委托方也以数组形式返回\n8. 提取所有厂商相关信息填入manufacturerInfo对象\n9. 提取所有食品相关信息填入foodList数组，每个食品为数组中的一个对象，确保每个食品的完整信息都被提取，不遗漏任何字段\n10. 营养成分表必须完整提取到 nutrition 字段，保留项目、含量、NRV%等表格内容\n11. 贮存条件必须单独提取到storage_condition字段，不要混入温馨提示(tips)中\n12. 未找到的字段填空字符串，确保输出严格符合指定的JSON结构\n13. 日期使用YYYY-MM-DD格式，数值保持原始格式",
+    "jsonStructure": [
+      {
+        "name": "manufacturerInfo",
+        "paramType": "Object",
+        "paramDescription": "厂商信息，schema: {rawMaterialSupplier: Object(原料生产商信息，schema: {name: string(名称), address: string(地址), license: string(许可证号), phone: string(联系电话), origin: string(产地)}), delegator: Object(委托方/经销商/品牌商信息，schema: {name: string(名称), address: string(地址), phone: string(联系电话)}), entrustedParty: Object(被委托方/代工厂信息，schema: {name: string(名称), address: string(地址), license: string(许可证号), phone: string(联系电话), origin: string(产地)})}"
+      },
+      {
+        "name": "foodList",
+        "paramType": "Array",
+        "paramDescription": "食品列表，items schema: {id: number(食品序号), title: string(食品主标题), name: string(食品名称), type: string(产品类型), ingredients: string(配料表), nutrition: string(营养成分表), netContent: string(净含量), shelfLife: string(保质期), standardCode: string(产品标准号), allergens: Array<string>(过敏原数组), storage_condition: string(贮存条件), tips: string(温馨提示)}"
+      }
+    ]
+  },
+  "createdAt": 1777284481230,
+  "updatedAt": 1778055696509,
+  "createdBy": 7213261982903025665
+}
